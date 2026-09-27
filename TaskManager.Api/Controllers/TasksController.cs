@@ -28,9 +28,7 @@ namespace TaskManager.Api.Controllers
        [HttpPost]
 public async Task<IActionResult> Create(TaskItem task)
 {
-    var userId = GetUserId();
-   
-    
+    var userId = GetUserId();    
     task.UserId = userId;
     _context.Tasks.Add(task);
     await _context.SaveChangesAsync();

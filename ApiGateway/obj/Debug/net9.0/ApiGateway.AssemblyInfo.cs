@@ -10,12 +10,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("TaskManager.Api")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("ApiGateway")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+378ad6bc660b4007ffb06b70820c5db2670085ee")]
-[assembly: System.Reflection.AssemblyProductAttribute("TaskManager.Api")]
-[assembly: System.Reflection.AssemblyTitleAttribute("TaskManager.Api")]
+[assembly: System.Reflection.AssemblyProductAttribute("ApiGateway")]
+[assembly: System.Reflection.AssemblyTitleAttribute("ApiGateway")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Généré par la classe MSBuild WriteCodeFragment.
