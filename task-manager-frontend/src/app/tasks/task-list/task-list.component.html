@@ -1,0 +1,37 @@
+<div class="dashboard">
+  <header>
+    <h1>Mes Tâches</h1>
+    <button (click)="logout()">Déconnexion</button>
+  </header>
+
+  <div class="counters">
+    <div class="counter">Total : {{ totalCount }}</div>
+    <div class="counter">Terminées : {{ completedCount }}</div>
+    <div class="counter">En cours : {{ pendingCount }}</div>
+  </div>
+
+  <form (ngSubmit)="addTask()" class="add-task-form">
+    <input type="text" [(ngModel)]="newTitle" name="newTitle" placeholder="Titre de la tâche" required />
+    <input type="text" [(ngModel)]="newDescription" name="newDescription" placeholder="Description (optionnel)" />
+    <select [(ngModel)]="newPriority" name="newPriority">
+      <option value="Low">Faible</option>
+      <option value="Medium">Moyenne</option>
+      <option value="High">Haute</option>
+    </select>
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <ul class="task-list">
+    <li *ngFor="let task of tasks" [class.completed]="task.isCompleted">
+      <input type="checkbox" [checked]="task.isCompleted" (change)="toggleComplete(task)" />
+      <div class="task-content">
+        <strong>{{ task.title }}</strong>
+        <p *ngIf="task.description">{{ task.description }}</p>
+        <span class="priority">{{ task.priority }}</span>
+      </div>
+      <button (click)="deleteTask(task.id!)">Supprimer</button>
+    </li>
+  </ul>
+
+  <p *ngIf="tasks.length === 0" class="empty-state">Aucune tâche pour l'instant.</p>
+</div>
