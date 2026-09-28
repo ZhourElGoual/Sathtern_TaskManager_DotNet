@@ -1,0 +1,78 @@
+<nav class="navbar">
+  <div class="logo">✅ Todo</div>
+  <div class="nav-actions">
+    <button class="icon-btn" (click)="toggleTheme()" aria-label="Changer de thème">🌓</button>
+    <ng-container *ngIf="!isLoggedIn; else loggedIn">
+      <a routerLink="/login" class="btn btn-ghost">Connexion</a>
+      <a routerLink="/register" class="btn btn-primary">S'inscrire</a>
+    </ng-container>
+    <ng-template #loggedIn>
+      <a routerLink="/tasks" class="btn btn-primary">Mes tâches</a>
+    </ng-template>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="hero-text">
+    <span class="badge">Nouveau · Gestionnaire de tâches</span>
+    <h1>Organise ta journée,<br /><span class="gradient-text">sans effort.</span></h1>
+    <p>Une application simple et sécurisée pour planifier, suivre et terminer tes tâches, où que tu sois.</p>
+    <div class="hero-cta">
+      <a [routerLink]="isLoggedIn ? '/tasks' : '/register'" class="btn btn-primary btn-lg">
+        {{ isLoggedIn ? 'Ouvrir mes tâches' : 'Commencer gratuitement' }}
+      </a>
+      <a href="#features" class="btn btn-ghost btn-lg">En savoir plus</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="mock-card card-1">
+      <span class="check done">✓</span>
+      <div><strong>Préparer la présentation</strong><small>Haute · Travail</small></div>
+    </div>
+    <div class="mock-card card-2">
+      <span class="check done">✓</span>
+      <div><strong>Envoyer le rapport</strong><small>Moyenne · Stage</small></div>
+    </div>
+    <div class="mock-card card-3">
+      <span class="check"></span>
+      <div><strong>Réviser Angular</strong><small>Faible · Perso</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <h2 class="section-title reveal">Tout ce qu'il te faut</h2>
+  <div class="features-grid">
+    <div class="feature reveal" *ngFor="let f of features; let i = index" [style.transition-delay.ms]="i * 90">
+      <div class="feature-icon">{{ f.icon }}</div>
+      <h3>{{ f.title }}</h3>
+      <p>{{ f.text }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="section steps-section">
+  <h2 class="section-title reveal">Comment ça marche ?</h2>
+  <div class="steps">
+    <div class="step reveal" *ngFor="let s of steps; let i = index" [style.transition-delay.ms]="i * 150">
+      <div class="step-number">{{ s.n }}</div>
+      <h3>{{ s.title }}</h3>
+      <p>{{ s.text }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta reveal">
+  <h2>Prêt à t'y mettre ?</h2>
+  <p>Crée ton compte et ajoute ta première tâche dès maintenant.</p>
+  <a [routerLink]="isLoggedIn ? '/tasks' : '/register'" class="btn btn-light btn-lg">
+    {{ isLoggedIn ? 'Ouvrir mes tâches' : 'Créer mon compte' }}
+  </a>
+</section>
+<footer class="footer">
+  <p>© 2026 Todo · Organise ta journée simplement</p>
+</footer>

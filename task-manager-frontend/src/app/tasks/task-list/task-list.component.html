@@ -10,28 +10,52 @@
     <div class="counter">En cours : {{ pendingCount }}</div>
   </div>
 
-  <form (ngSubmit)="addTask()" class="add-task-form">
-    <input type="text" [(ngModel)]="newTitle" name="newTitle" placeholder="Titre de la tâche" required />
-    <input type="text" [(ngModel)]="newDescription" name="newDescription" placeholder="Description (optionnel)" />
-    <select [(ngModel)]="newPriority" name="newPriority">
-      <option value="Low">Faible</option>
-      <option value="Medium">Moyenne</option>
-      <option value="High">Haute</option>
-    </select>
-    <button type="submit">Ajouter</button>
-  </form>
+ <form (ngSubmit)="addTask()" class="add-task-form">
+  <input type="text" [(ngModel)]="newTitle" name="newTitle" placeholder="Titre de la tâche" required />
+  <input type="text" [(ngModel)]="newDescription" name="newDescription" placeholder="Description (optionnel)" />
+  <input type="text" [(ngModel)]="newCategory" name="newCategory" placeholder="Catégorie (optionnel)" />
+  <input type="date" [(ngModel)]="newDueDate" name="newDueDate" />
+  <select [(ngModel)]="newPriority" name="newPriority">
+    <option value="Low">Faible</option>
+    <option value="Medium">Moyenne</option>
+    <option value="High">Haute</option>
+  </select>
+  <button type="submit">Ajouter</button>
+</form>
 
-  <ul class="task-list">
-    <li *ngFor="let task of tasks" [class.completed]="task.isCompleted">
-      <input type="checkbox" [checked]="task.isCompleted" (change)="toggleComplete(task)" />
-      <div class="task-content">
-        <strong>{{ task.title }}</strong>
-        <p *ngIf="task.description">{{ task.description }}</p>
-        <span class="priority">{{ task.priority }}</span>
+<div class="filters">
+  <input type="text" [(ngModel)]="searchTerm" name="searchTerm" placeholder="🔍 Rechercher..." (ngModelChange)="applyFilters()" />
+
+  <select [(ngModel)]="filterStatus" name="filterStatus" (ngModelChange)="applyFilters()">
+    <option value="all">Tous les statuts</option>
+    <option value="pending">En cours</option>
+    <option value="completed">Terminées</option>
+  </select>
+
+  <select [(ngModel)]="filterPriority" name="filterPriority" (ngModelChange)="applyFilters()">
+    <option value="all">Toutes priorités</option>
+    <option value="High">Haute</option>
+    <option value="Medium">Moyenne</option>
+    <option value="Low">Faible</option>
+  </select>
+</div>
+<ul class="task-list">
+  <li *ngFor="let task of filteredTasks" [class.completed]="task.isCompleted">
+    <input type="checkbox" [checked]="task.isCompleted" (change)="toggleComplete(task)" />
+    <div class="task-content">
+      <strong>{{ task.title }}</strong>
+      <p *ngIf="task.description">{{ task.description }}</p>
+      <div class="tags">
+        <span class="priority" [class]="'priority-' + task.priority.toLowerCase()">{{ task.priority }}</span>
+        <span class="category" *ngIf="task.category">{{ task.category }}</span>
+        <span class="due-date" *ngIf="task.dueDate">📅 {{ task.dueDate | date:'dd/MM/yyyy' }}</span>
       </div>
-      <button (click)="deleteTask(task.id!)">Supprimer</button>
-    </li>
-  </ul>
+    </div>
+    <button (click)="deleteTask(task.id!)">Supprimer</button>
+  </li>
+</ul>
+
+<p *ngIf="filteredTasks.length === 0" class="empty-state">Aucune tâche trouvée.</p>
 
   <p *ngIf="tasks.length === 0" class="empty-state">Aucune tâche pour l'instant.</p>
 </div>

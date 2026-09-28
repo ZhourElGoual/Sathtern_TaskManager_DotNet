@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { tap, finalize } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -25,12 +25,15 @@ export class AuthService {
 
   logout() {
     const refreshToken = localStorage.getItem(this.refreshKey);
+    // finalize : la session locale est supprimée dans TOUS les cas (succès ou erreur)
     return this.http.post(`${this.apiUrl}/logout`, { refreshToken }).pipe(
-      tap(() => {
-        localStorage.removeItem(this.tokenKey);
-        localStorage.removeItem(this.refreshKey);
-      })
+      finalize(() => this.clearSession())
     );
+  }
+
+  clearSession() {
+    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.refreshKey);
   }
 
   getToken(): string | null {
@@ -38,6 +41,20 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    const token = this.getToken();
+    if (!token) return false;
+
+    try {
+      const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(atob(base64));
+      if (payload.exp && payload.exp * 1000 < Date.now()) {
+        this.clearSession(); // token expiré → on considère l'utilisateur déconnecté
+        return false;
+      }
+      return true;
+    } catch {
+      this.clearSession();
+      return false;
+    }
   }
 }
